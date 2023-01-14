@@ -14,13 +14,28 @@ const Description = ({ countriesToShow }) => {
   if (nCountries > 10) {
     return <div>Too many matches, specify another filter</div>
   } else if (nCountries > 1) {
-    return <div>{countriesToShow.map(c => <li key={c.name.common}>{c.name.common}</li>)}</div>
+    return <CountryList countriesToShow={countriesToShow} />
   } else if (nCountries === 1) {
     console.log("found 1 country")
     return <CountryInfo countryData={countriesToShow[0]} />
   } else if (nCountries === 0) {
     return <div></div>
   }
+}
+
+const CountryItem = ({ country }) => {
+  const [showCountryInfo, setShowCountryInfo] = useState(false)
+  return (
+    <li key={country.name.common}>
+      {country.name.common} <button onClick={() => setShowCountryInfo(!showCountryInfo)}>{showCountryInfo ? "hide" : "show"}</button>
+      {showCountryInfo ? <CountryInfo countryData={country} /> : <div></div>}
+    </li>)
+}
+
+const CountryList = ({ countriesToShow }) => {
+  return <div>{countriesToShow.map(c =>
+    <CountryItem country={c} />
+  )}</div>
 }
 
 const CountryInfo = ({ countryData }) => 
