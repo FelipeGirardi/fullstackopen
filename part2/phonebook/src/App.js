@@ -72,6 +72,17 @@ const App = () => {
     setIsFiltering(currentFilterValue.length > 0 ? true : false)
   }
 
+  const confirmDelete = (person) => {
+    console.log(person)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.deletePerson(person.id)
+        .then(() => {
+          console.log('deleted person')
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
+  }
+
   const personsToShow = isFiltering
     ? persons.filter(person => person.name.toLowerCase().includes(filteredName))
     : persons
@@ -83,7 +94,7 @@ const App = () => {
       <h3>Add new item</h3>
       <PersonForm newName={newName} newNumber={newNumber} addName={addName} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} allPersons={persons} setPersons={setPersons} />
+      <Persons personsToShow={personsToShow} confirmDelete={confirmDelete} />
     </div>
   )
 }
