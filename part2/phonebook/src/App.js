@@ -12,12 +12,11 @@ const App = () => {
   const [isFiltering, setIsFiltering] = useState(false)
 
   useEffect(() => {
-    console.log('effect')
     personService
       .getAll()
       .then(initialPersons => {
-        console.log('promise fulfilled')
         setPersons(initialPersons)
+        console.log(initialPersons)
       })
   }, [])
 
@@ -25,10 +24,20 @@ const App = () => {
     event.preventDefault()
     for (const p of persons) {
       if (p.name === newName) {
-        alert(`${newName} is already added to phonebook`)
-        setNewName('')
-        setNewNumber('')
-        return
+        if (window.confirm(`${p.name} is already added to the phonebook, replace the old number with a new one?`)) {
+          const personObject = {
+            name: newName,
+            number: newNumber,
+            id: p.id
+          }
+
+          personService.update(p.id, personObject)
+            .then((returnedPerson) => {
+              console.log('updated number')
+              setPersons(persons.map(prsn => prsn.id !== p.id ? prsn : returnedPerson))
+            })
+          return
+        }
       }
     }
 
@@ -74,7 +83,7 @@ const App = () => {
       <h3>Add new item</h3>
       <PersonForm newName={newName} newNumber={newNumber} addName={addName} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} allPersons={persons} setPersons={setPersons} />
     </div>
   )
 }
