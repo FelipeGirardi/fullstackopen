@@ -1,8 +1,10 @@
+import './index.css'
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Filter from './components/filter.js'
 import PersonForm from './components/person_form.js'
 import Persons from './components/person_list.js'
+import GenericAlert from './components/alerts.js'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,6 +12,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filteredName, setFilteredName] = useState('')
   const [isFiltering, setIsFiltering] = useState(false)
+  const [confirmationMessage, setConfirmationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -31,13 +35,23 @@ const App = () => {
             id: p.id
           }
 
-          personService.update(p.id, personObject)
-            .then((returnedPerson) => {
-              console.log('updated number')
-              setPersons(persons.map(prsn => prsn.id !== p.id ? prsn : returnedPerson))
-            })
-          return
+          personService
+          .update(p.id, personObject)
+          .then((returnedPerson) => {
+            console.log('updated number')
+            setPersons(persons.map(prsn => prsn.id !== p.id ? prsn : returnedPerson))
+          })
+          .catch(error => {
+            setErrorMessage(
+              `Information of '${p.name}' has already been removed from server`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            setPersons(persons.filter(prsn => prsn.id !== p.id))
+          })
         }
+        return
       }
     }
 
@@ -52,6 +66,12 @@ const App = () => {
       .create(personObject)
       .then(returnedPerson => {
         console.log('created person')
+        setConfirmationMessage(
+          `Added ${returnedPerson.name}`
+        )
+        setTimeout(() => {
+          setConfirmationMessage(null)
+        }, 5000)
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
@@ -90,6 +110,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <GenericAlert type='confirmation' message={confirmationMessage} />
+      <GenericAlert type='error' message={errorMessage} />
       <Filter value={filteredName} onChange={handleFilterChange} />
       <h3>Add new item</h3>
       <PersonForm newName={newName} newNumber={newNumber} addName={addName} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
