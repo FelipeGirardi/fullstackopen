@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Alert } from 'react-bootstrap'
+import { Page } from './styles'
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 import AppRoutes from './AppRoutes'
@@ -30,7 +32,7 @@ const App = () => {
     setAnecdotes(anecdotes.concat(anecdote))
     setNotification(`new anecdote created: ${anecdote.content}`)
     setTimeout(
-      function() {
+      function () {
         setNotification('')
       }, 5000)
     navigate('/anecdotes')
@@ -51,13 +53,19 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Software anecdotes</h1>
-      <Menu />
-      {notification}
-      <AppRoutes anecdotes={anecdotes} addNew={addNew} />
-      &nbsp;
-      <Footer />
+    <div className="container">
+      <Page>
+        <h1>Software anecdotes</h1>
+        <Menu />
+        {(notification &&
+          <Alert variant="success">
+            {notification}
+          </Alert>
+        )}
+        <AppRoutes anecdotes={anecdotes} addNew={addNew} />
+        &nbsp;
+        <Footer />
+      </Page>
     </div>
   )
 }

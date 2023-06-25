@@ -1,4 +1,5 @@
 import  { useField } from '../hooks'
+import { Input, Button } from '../styles'
 
 const CreateNew = (props) => {
   const {onReset: resetContent, ...content} = useField('content')
@@ -8,9 +9,9 @@ const CreateNew = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
   }
@@ -27,19 +28,19 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <Input {...content} />
         </div>
         <div>
           author
-          <input {...author} />
+          <Input {...author} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <Input {...info} />
         </div>
         <button>create</button>
       </form>
-      <button onClick={() => handleReset()}>reset</button>
+      <Button onClick={() => handleReset()}>reset</Button>
     </div>
   )
 }
