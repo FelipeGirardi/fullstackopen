@@ -1,45 +1,29 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog, deleteABlog } from "../reducers/blogsReducer";
-import Blog from "./Blog"
+import { Link } from 'react-router-dom'
+import BlogForm from "./BlogForm"
+import Togglable from "./Togglable"
 
-const BlogsList = () => {
-  const currentBlogs = useSelector(state => {
-    return state.blogs
-  })
-  const currBlogs = [...currentBlogs]
-  const dispatch = useDispatch()
-
-  const handleLike = async (id) => {
-    try {
-      dispatch(likeBlog(id))
-    } catch (exception) {
-      console.log("Could not like blog")
-    }
-  }
-
-  const deleteBlog = async (blog) => {
-    try {
-      if (window.confirm(`Delete ${blog.title}?`)) {
-        dispatch(deleteABlog(blog.id))
-      }
-    } catch (exception) {
-      console.log("Could not delete blog")
-    }
+const BlogsList = ({blogs}) => {
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: "solid",
+    borderWidth: 1,
+    marginBottom: 5,
+    listStyleType: 'none',
   }
 
   return (
     <div>
-      <h2>blogs</h2>
-      {currBlogs
+      <Togglable buttonLabel="new blog">
+        <BlogForm />
+      </Togglable>
+      {blogs
         .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleLike={handleLike}
-            deleteBlog={deleteBlog}
-          />
-        ))}
+        .map((blog) => 
+          <li key={blog.id} style={blogStyle}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title} - {blog.author}</Link>
+          </li>
+        )}
     </div>
   )
 }

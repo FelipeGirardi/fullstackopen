@@ -7,9 +7,9 @@ const Notification = ({ notifType }) => {
 
   const style = {
     border: 'solid',
-    padding: 10,
+    padding: message === '' ? 0 : 10,
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: message === '' ? 0 : 10,
     visibility: message === '' ? 'hidden' : 'visible'
   }
 

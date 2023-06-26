@@ -1,41 +1,46 @@
-import { useState } from "react";
+import { useDispatch } from 'react-redux'
+import { likeBlog, deleteABlog } from "../reducers/blogsReducer"
 
-const Blog = ({ blog, handleLike, deleteBlog }) => {
-  const [visible, setVisible] = useState(false);
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
+  const handleLike = async (id) => {
+    try {
+      dispatch(likeBlog(id))
+    } catch (exception) {
+      console.log("Could not like blog")
+    }
+  }
 
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+  const deleteBlog = async (blog) => {
+    try {
+      if (window.confirm(`Delete ${blog.title}?`)) {
+        dispatch(deleteABlog(blog.id))
+      }
+    } catch (exception) {
+      console.log("Could not delete blog")
+    }
+  }
 
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
+
+  if (!blog) {
+    return null
+  }
 
   return (
     <div style={blogStyle} className="blog">
       <div style={{ display: "flex" }} className="short">
         {" "}
-        {blog.title} - {blog.author}
-        <div style={showWhenVisible}>
-          {" "}
-          <button onClick={toggleVisibility} id="lessInfo">
-            hide
-          </button>
-        </div>
-        <div style={hideWhenVisible}>
-          <button onClick={toggleVisibility} id="moreInfo">
-            view
-          </button>
-        </div>
+        <h2>{blog.title} - {blog.author}</h2>
+        &nbsp;
       </div>
-      <div style={showWhenVisible} className="long">
+      <div className="long">
         <div className="url"><a href={blog.url}>{blog.url}</a></div>
         <div id="likes" className="likes">
           likes: {blog.likes}{" "}
@@ -43,7 +48,7 @@ const Blog = ({ blog, handleLike, deleteBlog }) => {
             like
           </button>
         </div>
-        <div className="username">{blog.user.name}</div>
+        <div className="username">added by {blog.user.name}</div>
         <div>
           <button
             id="deleteButton"

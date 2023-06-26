@@ -1,27 +1,28 @@
-import { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux'
-import BlogsList from './components/BlogsList'
-import Notification from "./components/Notification";
-import LoginForm from "./components/LoginForm";
-import BlogForm from "./components/BlogForm";
-import Togglable from "./components/Togglable";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import Notification from "./components/Notification"
+import LoginForm from "./components/LoginForm"
+import Menu from './components/Menu'
+import blogService from "./services/blogs"
+import loginService from "./services/login"
 import { setNotification } from './reducers/notifReducer'
-import { initializeBlogs } from "./reducers/blogsReducer";
+import { initializeBlogs } from "./reducers/blogsReducer"
+import { initializeUsers } from "./reducers/usersReducer"
+import AppRoutes from './AppRoutes'
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [notificationType, setNotificationType] = useState("");
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [user, setUser] = useState(null)
+  const [notificationType, setNotificationType] = useState("")
 
   const dispatch = useDispatch()
   const notifTime = 3000
 
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [dispatch]);
+    dispatch(initializeUsers())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
@@ -30,7 +31,17 @@ const App = () => {
       blogService.setToken(user.token);
       setUser(user);
     }
-  }, []);
+  }, [])
+
+  const currentBlogs = useSelector(state => {
+    return state.blogs
+  })
+  const currBlogs = [...currentBlogs]
+
+  const currentUsers = useSelector(state => {
+    return state.users
+  })
+  const currUsers = [...currentUsers]
 
   // -- handles
 
@@ -69,7 +80,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Blogs</h1>
+      <h1>Blog app</h1>
       <Notification notifType={notificationType} />
       {!user && (
         <LoginForm
@@ -82,14 +93,8 @@ const App = () => {
       )}
       {user && (
         <div>
-          <p>{user.name} logged in</p>
-          <Togglable buttonLabel="new blog">
-            <BlogForm />
-          </Togglable>
-          <BlogsList />
-          <button id="logoutButton" onClick={() => handleLogout()}>
-            logout
-          </button>
+          <Menu username={user.name} handleLogout={handleLogout} />
+          <AppRoutes blogs={currBlogs} users={currUsers} />
         </div>
       )}
     </div>
