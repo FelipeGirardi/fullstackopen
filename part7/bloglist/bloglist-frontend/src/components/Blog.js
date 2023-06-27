@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { likeBlog, deleteABlog } from "../reducers/blogsReducer"
+import CommentsList from './CommentsList'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -40,6 +41,7 @@ const Blog = ({ blog }) => {
         <h2>{blog.title} - {blog.author}</h2>
         &nbsp;
       </div>
+
       <div className="long">
         <div className="url"><a href={blog.url}>{blog.url}</a></div>
         <div id="likes" className="likes">
@@ -59,6 +61,8 @@ const Blog = ({ blog }) => {
           </button>
         </div>
       </div>
+
+      <CommentsList blog={blog}/>
     </div>
   );
 };

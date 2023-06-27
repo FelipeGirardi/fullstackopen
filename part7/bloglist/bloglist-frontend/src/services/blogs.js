@@ -26,6 +26,14 @@ const createBlog = async (newObject) => {
   return response.data;
 };
 
+const commentBlog = async (id, newComment) => {
+  console.log(id)
+  console.log(newComment)
+  const commentObject = {comment: newComment}
+  const response = await axios.post(`${baseUrl}/${id}/comments`, commentObject);
+  return response.data;
+}
+
 const updateBlogLike = async (id) => {
   const object = await axios.get(`${baseUrl}/${id}`)
   const updatedBlog = { ...object.data, likes: object.data.likes + 1 }
@@ -42,4 +50,4 @@ const deleteBlog = async (id) => {
   return response.data;
 };
 
-export default { setToken, getAllBlogs, getBlog, createBlog, updateBlogLike, deleteBlog };
+export default { setToken, getAllBlogs, getBlog, createBlog, commentBlog, updateBlogLike, deleteBlog };
