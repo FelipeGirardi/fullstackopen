@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { likeBlog, deleteABlog } from "../reducers/blogsReducer"
 import CommentsList from './CommentsList'
+import { MarginDiv } from '../styles';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -38,30 +39,26 @@ const Blog = ({ blog }) => {
     <div style={blogStyle} className="blog">
       <div style={{ display: "flex" }} className="short">
         {" "}
-        <h2>{blog.title} - {blog.author}</h2>
+        <h3>{blog.title} - {blog.author}</h3>
         &nbsp;
       </div>
 
       <div className="long">
-        <div className="url"><a href={blog.url}>{blog.url}</a></div>
-        <div id="likes" className="likes">
+        <MarginDiv className="url" style={{paddingTop: 3}}><a href={blog.url}>{blog.url}</a></MarginDiv>
+        <MarginDiv id="likes" className="likes">
           likes: {blog.likes}{" "}
           <button onClick={() => handleLike(blog.id)} id="likeButton">
             like
           </button>
-        </div>
-        <div className="username">added by {blog.user.name}</div>
-        <div>
-          <button
-            id="deleteButton"
-            style={{ backgroundColor: "cyan" }}
-            onClick={() => deleteBlog(blog)}
-          >
+        </MarginDiv>
+        <MarginDiv className="username">added by {blog.user.name}</MarginDiv>
+        <MarginDiv>
+          <button id="deleteButton" onClick={() => deleteBlog(blog)}>
             remove
           </button>
-        </div>
+        </MarginDiv>
       </div>
-
+      &nbsp;
       <CommentsList blog={blog}/>
     </div>
   );

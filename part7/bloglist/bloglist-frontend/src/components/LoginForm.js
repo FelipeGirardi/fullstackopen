@@ -27,7 +27,7 @@ const LoginForm = ({
           onChange={handlePasswordChange}
         />
       </div>
-      <button id="login-button" type="submit">
+      <button id="login-button" type="submit" style={{marginTop: '1em'}}>
         login
       </button>
     </form>

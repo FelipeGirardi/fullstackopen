@@ -9,6 +9,7 @@ import { setNotification } from './reducers/notifReducer'
 import { initializeBlogs } from "./reducers/blogsReducer"
 import { initializeUsers } from "./reducers/usersReducer"
 import AppRoutes from './AppRoutes'
+import { Page, Title } from './styles'
 
 const App = () => {
   const [username, setUsername] = useState("")
@@ -80,24 +81,26 @@ const App = () => {
 
   return (
     <div>
-      <h1>Blog app</h1>
-      <Notification notifType={notificationType} />
-      {!user && (
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleLogin={handleLogin}
-        />
-      )}
-      {user && (
-        <div>
-          <Menu username={user.name} handleLogout={handleLogout} />
-          <AppRoutes blogs={currBlogs} users={currUsers} />
-        </div>
-      )}
-    </div>
+      <Page>
+        <Notification notifType={notificationType} />
+        {!user && (
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={handleLogin}
+          />
+        )}
+        {user && (
+          <div>
+            <Menu username={user.name} handleLogout={handleLogout} />
+            <h1 style={{textAlign: "center"}}>Blog app</h1>
+            <AppRoutes blogs={currBlogs} users={currUsers} />
+          </div>
+        )}
+        </Page>
+      </div>
   );
 };
 

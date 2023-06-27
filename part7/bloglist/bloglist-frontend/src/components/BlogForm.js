@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { addBlog } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notifReducer'
+import { NewBlogForm } from '../styles'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -21,38 +22,40 @@ const BlogForm = () => {
   }
 
   return (
-    <form onSubmit={addNewBlog}>
-      <div>
-        title
-        <input
-          type="text"
-          name="Title"
-          placeholder="Blog title"
-          id="blogTitle"
-        />
-      </div>
-      <div>
-        author
-        <input
-          type="text"
-          name="Author"
-          placeholder="Blog author"
-          id="blogAuthor"
-        />
-      </div>
-      <div>
-        url
-        <input
-          type="text"
-          name="Url"
-          placeholder="Blog url"
-          id="blogUrl"
-        />
-      </div>
-      <button id="create-button" type="submit">
-        create
-      </button>
-    </form>
+    <NewBlogForm>
+      <form onSubmit={addNewBlog}>
+        <div>
+          title
+          <input
+            type="text"
+            name="Title"
+            placeholder="Blog title"
+            id="blogTitle"
+          />
+        </div>
+        <div>
+          author
+          <input
+            type="text"
+            name="Author"
+            placeholder="Blog author"
+            id="blogAuthor"
+          />
+        </div>
+        <div>
+          url
+          <input
+            type="text"
+            name="Url"
+            placeholder="Blog url"
+            id="blogUrl"
+          />
+        </div>
+        <button id="create-button" type="submit" style={{marginTop: '1em'}}>
+          create
+        </button>
+      </form>
+    </NewBlogForm>
   );
 };
 
