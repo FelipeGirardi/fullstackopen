@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
 
 const LoginForm = ({ setToken }) => {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [ login, result ] = useMutation(LOGIN, {
@@ -16,6 +18,7 @@ const LoginForm = ({ setToken }) => {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('library-user-token', token)
+      navigate('/')
     }
   }, [result.data]) // eslint-disable-line
 
