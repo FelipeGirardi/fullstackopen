@@ -3,6 +3,7 @@ interface ExerciseValues {
   dailyHours: number[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isNotNumber = (argument: any): boolean =>
   isNaN(Number(argument));
 
@@ -20,13 +21,13 @@ const parseArgs = (args: string[]): ExerciseValues => {
   return {
     targetValue: Number(targetNumber),
     dailyHours: hours
-  }
-}
+  };
+};
 
 
-const calculateExercises = (targetValue: number, dailyHours: number[]) => {
+export const calculateExercises = (targetValue: number, dailyHours: number[]) => {
     const periodLength = dailyHours.length;
-    const trainingDays = dailyHours.filter(h => h !== 0).length
+    const trainingDays = dailyHours.filter(h => h !== 0).length;
     const sum = dailyHours.reduce((accumulator, value) => {
       return accumulator + value;
     }, 0);
@@ -42,22 +43,22 @@ const calculateExercises = (targetValue: number, dailyHours: number[]) => {
       : rating === 2 ? 'Not too bad, but could be better!'
       : 'Not very good, but you can improve!';
 
-    console.log(`{
-      periodLength: ${periodLength},
-      trainingDays: ${trainingDays},
-      success: ${success},
-      rating: ${rating},
-      ratingDescription: ${ratingDescription},
-      target: ${targetValue},
-      average: ${average}
-    }`);
-}
+    return({
+      'periodLength': periodLength,
+      'trainingDays': trainingDays,
+      'success': success,
+      'rating': rating,
+      'ratingDescription': ratingDescription,
+      'target': targetValue,
+      'average': average
+    });
+};
 
 try {
   const { targetValue, dailyHours } = parseArgs(process.argv);
   calculateExercises(targetValue, dailyHours);
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }

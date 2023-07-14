@@ -11,36 +11,36 @@ const parseArguments = (args: string[]): BMIValues => {
     return {
       heightValue: Number(args[2]),
       weightValue: Number(args[3])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
-const calculateBMI = (height: number, weight: number) => {
+export const calculateBMI = (height: number, weight: number) => {
   if (weight === 0) throw new Error('Can\'t divide by 0!');
   const heightInMeters = height/100;
   const bmiValue = weight / (heightInMeters * heightInMeters);
 
     if (bmiValue < 18.5) {
-      console.log('Underweight');
+      return 'Underweight';
     }
     else if (bmiValue > 18.5 && bmiValue < 25) {
-      console.log('Normal');
+      return 'Normal';
     }
     else if (bmiValue > 25 && bmiValue < 30) {
-      console.log('Overweight');
+      return 'Overweight';
     }
-    else if (bmiValue > 30) {
-      console.log('Obese');
+    else {
+      return 'Obese';
     }
-}
+};
 
 try {
   const { heightValue, weightValue } = parseArguments(process.argv);
   calculateBMI(heightValue, weightValue);
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }
