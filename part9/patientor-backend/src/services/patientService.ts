@@ -10,12 +10,13 @@ const getPatients = (): Patient[] => {
 };
 
 const getNoSSNPatients = (): NoSSNPatient[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,
     name,
     dateOfBirth,
     gender,
-    occupation
+    occupation,
+    entries
   }));
 };
 

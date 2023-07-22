@@ -8,7 +8,7 @@ router.get('/', (_req, res) => {
   res.send(patientService.getNoSSNPatients());
 });
 
-router.get(':id', (req, res) => {
+router.get('/:id', (req, res) => {
   const patient = patientService.getPatient(req.params.id);
   if (patient) {
     res.send(patient);
