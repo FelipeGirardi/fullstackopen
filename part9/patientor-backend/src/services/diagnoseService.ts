@@ -12,8 +12,9 @@ const getDiagnose = (code: string): Diagnose | undefined => {
   return diagnose;
 };
 
-const addDiagnose = () => {
-  return null;
+const addDiagnose = (diagnose: Diagnose): Diagnose => {
+  diagnoses.push(diagnose);
+  return diagnose;
 };
 
 export default {

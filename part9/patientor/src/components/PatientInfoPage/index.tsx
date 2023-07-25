@@ -1,21 +1,29 @@
-import { Gender, Patient } from "../../types";
+import { Diagnose, Gender, Patient } from "../../types";
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import patientService from "../../services/patients";
+import diagnoseService from "../../services/diagnose";
+import EntryDetails from "../EntryDetails/index";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 
 const PatientInfoPage = () => {
   const patientId = useParams().id;
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [diagnoses, setDiagnoses] = useState<Diagnose[] | null>(null);
 
   useEffect(() => {
     const getPatientData = async () => {
       const patientData = await patientService.getPatient(patientId as string);
       setPatient(patientData);
     };
+    const fetchDiagnoses = async () => {
+      const diagnoses = await diagnoseService.getAll();
+      setDiagnoses(diagnoses);
+    };
 
     getPatientData();
+    fetchDiagnoses();
   }, [patientId]);
 
   if (patient) {
@@ -27,11 +35,22 @@ const PatientInfoPage = () => {
         <h2><b>{patient.name}</b></h2>
         {patient.gender === Gender.Female ? <FemaleIcon /> : <MaleIcon />}
       </div>
-      <ul style={{listStyle:'none', padding: 0}}>
-        <li>ssh: {patient.ssn}</li>
-        {' '}
-        <li>occupation: {patient.occupation}</li>
-      </ul>
+
+      <div>
+        <ul style={{listStyle:'none', padding: 0}}>
+          <li key={patient.id}>
+            <div>ssh: {patient.ssn}</div>
+            <i>occupation: {patient.occupation}</i>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>Entries</h2>
+        {patient.entries.map(entry =>
+          <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
+        )}
+      </div>
     </div>
     );
   } else {
