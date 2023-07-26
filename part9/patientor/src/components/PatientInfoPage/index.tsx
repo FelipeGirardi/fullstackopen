@@ -6,6 +6,7 @@ import diagnoseService from "../../services/diagnose";
 import EntryDetails from "../EntryDetails/index";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
+import { Button } from '@mui/material';
 
 const PatientInfoPage = () => {
   const patientId = useParams().id;
@@ -36,20 +37,29 @@ const PatientInfoPage = () => {
         {patient.gender === Gender.Female ? <FemaleIcon /> : <MaleIcon />}
       </div>
 
-      <div>
-        <ul style={{listStyle:'none', padding: 0}}>
-          <li key={patient.id}>
-            <div>ssh: {patient.ssn}</div>
-            <i>occupation: {patient.occupation}</i>
-          </li>
-        </ul>
+      <div style={{paddingBottom: '10px'}}>
+        <div>ssh: {patient.ssn}</div>
+        <div><i>occupation: {patient.occupation}</i></div>
       </div>
 
       <div>
-        <h2>Entries</h2>
+        {patient.entries.length === 0 ? <div></div> : <h2>Entries</h2>}
         {patient.entries.map(entry =>
+        <div key={entry.id} style={{marginBottom: '10px'}}>
           <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
+        </div>
         )}
+      </div>
+
+      <div style={{paddingTop: '10px'}}><Button
+        style={{
+          float: "left",
+        }}
+        type="submit"
+        variant="contained"
+      >
+        Add new entry
+      </Button>
       </div>
     </div>
     );
